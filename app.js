@@ -12,12 +12,7 @@ const DEFAULT_STATE = {
     { text: "下班后散步 20 分钟", done: false },
     { text: "听 3 首新歌", done: false }
   ],
-  photos: [
-    { title: "清晨咖啡", src: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80" },
-    { title: "周末电影", src: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80" },
-    { title: "城市夜景", src: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&q=80" },
-    { title: "海边散步", src: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" }
-  ],
+  photos: [],
   memos: [],
   rambles: []
 };
@@ -46,6 +41,7 @@ const rambleList = document.getElementById("ramble-list");
 const moodButtons = document.querySelectorAll(".mood-btn");
 
 const state = { chips: [], todos: [], photos: [], memos: [], rambles: [] };
+let photoPreviewOpen = false;
 
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 function safeText(text) { return text.replace(/[<>&"'`]/g, ""); }
@@ -179,13 +175,76 @@ function renderPhotos() {
     li.dataset.title = photo.title || "我的照片";
     li.style.backgroundImage = `url("${photo.src}")`;
     li.innerHTML = `<button type="button" class="photo-remove" aria-label="删除照片">×</button>`;
-    li.querySelector("button").addEventListener("click", () => {
+    const removeBtn = li.querySelector("button");
+    removeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
       state.photos = state.photos.filter((item) => item.id !== photo.id);
       saveState();
       renderPhotos();
     });
+    li.addEventListener("click", () => openPhotoPreview(photo));
+    li.tabIndex = 0;
+    li.setAttribute("role", "button");
+    li.setAttribute("aria-label", `查看大图：${photo.title || "我的照片"}`);
+    li.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openPhotoPreview(photo);
+      }
+    });
     photoList.appendChild(li);
   });
+}
+
+function ensurePhotoPreview() {
+  let overlay = document.getElementById("photo-preview-overlay");
+  if (overlay) return overlay;
+
+  overlay = document.createElement("div");
+  overlay.id = "photo-preview-overlay";
+  overlay.className = "photo-preview-overlay";
+  overlay.hidden = true;
+  overlay.innerHTML = `
+    <div class="photo-preview-dialog" role="dialog" aria-modal="true" aria-label="图片预览">
+      <button type="button" class="photo-preview-close" aria-label="关闭预览">×</button>
+      <img class="photo-preview-image" alt="预览图片" />
+      <p class="photo-preview-title"></p>
+    </div>
+  `;
+
+  const dialog = overlay.querySelector(".photo-preview-dialog");
+  const closeBtn = overlay.querySelector(".photo-preview-close");
+  closeBtn.addEventListener("click", closePhotoPreview);
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closePhotoPreview();
+  });
+  dialog.addEventListener("click", (e) => e.stopPropagation());
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && photoPreviewOpen) closePhotoPreview();
+  });
+
+  document.body.appendChild(overlay);
+  return overlay;
+}
+
+function openPhotoPreview(photo) {
+  const overlay = ensurePhotoPreview();
+  const image = overlay.querySelector(".photo-preview-image");
+  const title = overlay.querySelector(".photo-preview-title");
+  image.src = photo.src;
+  image.alt = photo.title || "我的照片";
+  title.textContent = photo.title || "我的照片";
+  overlay.hidden = false;
+  photoPreviewOpen = true;
+  document.body.classList.add("preview-open");
+}
+
+function closePhotoPreview() {
+  const overlay = document.getElementById("photo-preview-overlay");
+  if (!overlay) return;
+  overlay.hidden = true;
+  photoPreviewOpen = false;
+  document.body.classList.remove("preview-open");
 }
 
 function addPhoto() {

@@ -252,6 +252,7 @@ ul { list-style: none; display: grid; gap: 8px; }
   position: relative;
   overflow: hidden;
   border: 1px solid var(--line);
+  cursor: zoom-in;
 }
 
 .photo::after {
@@ -280,6 +281,67 @@ ul { list-style: none; display: grid; gap: 8px; }
   background: rgba(225, 85, 85, 0.92);
   color: #fff;
   font-size: 12px;
+}
+
+.photo:focus-visible {
+  outline: 2px solid #2f6ea8;
+  outline-offset: 2px;
+}
+
+.photo-preview-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: rgba(10, 25, 45, 0.75);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.photo-preview-dialog {
+  position: relative;
+  width: min(92vw, 980px);
+  max-height: 90vh;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 38px 14px 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.photo-preview-image {
+  width: 100%;
+  max-height: 72vh;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #f2f7fc;
+}
+
+.photo-preview-title {
+  font-size: 0.9rem;
+  color: var(--muted);
+  text-align: center;
+  margin: 0;
+}
+
+.photo-preview-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(34, 67, 100, 0.9);
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0;
+}
+
+body.preview-open {
+  overflow: hidden;
 }
 
 .gallery-tools, .todo form {
@@ -361,4 +423,7 @@ footer {
   .todo-item { grid-template-columns: auto 1fr; }
   .todo-item .btn-danger { grid-column: 1 / -1; }
   .card { height: 380px; }
+  .photo-preview-overlay { padding: 12px; }
+  .photo-preview-dialog { width: 100%; padding: 34px 10px 10px; }
+  .photo-preview-image { max-height: 68vh; }
 }
