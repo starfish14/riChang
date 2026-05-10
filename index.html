@@ -1,0 +1,85 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>日常 | 生活娱乐站</title>
+  <meta name="theme-color" content="#dff1ff" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="sky-bg" aria-hidden="true">
+    <span class="cloud cloud-1"></span>
+    <span class="cloud cloud-2"></span>
+    <span class="cloud cloud-3"></span>
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>日常 · 生活娱乐站</h1>
+      <p class="subtitle">记录今天的情绪、备忘、碎碎念和打卡，给自己留点快乐空间。</p>
+      <div class="control-row">
+        <input id="chip-input" type="text" placeholder="新增标签，例如：羽毛球、桌游夜" />
+        <button id="chip-add-btn" class="btn-alt" type="button">添加标签</button>
+      </div>
+      <div class="chips" id="chips"></div>
+    </header>
+
+    <main>
+      <section class="card mood">
+        <h2>今日心情</h2>
+        <div class="mood-grid" id="mood-grid">
+          <button class="mood-btn">😄 状态很好</button>
+          <button class="mood-btn">😌 稳稳前进</button>
+          <button class="mood-btn">🤔 有点迷糊</button>
+          <button class="mood-btn">🥱 需要休息</button>
+        </div>
+      </section>
+
+      <section class="card memo">
+        <h2>备忘录</h2>
+        <textarea id="memo-input" placeholder="输入备忘内容，点击手动保存后生成条目..."></textarea>
+        <div class="control-row">
+          <span class="tag">条目模式</span>
+          <button id="memo-save-btn" type="button">手动保存</button>
+        </div>
+        <ul class="note-list" id="memo-list"></ul>
+      </section>
+
+      <section class="card ramble">
+        <h2>碎碎念</h2>
+        <textarea id="ramble-input" placeholder="输入碎碎念，点击手动保存后生成条目..."></textarea>
+        <div class="control-row">
+          <span class="tag">条目模式</span>
+          <button id="ramble-save-btn" type="button">手动保存</button>
+        </div>
+        <ul class="note-list" id="ramble-list"></ul>
+      </section>
+
+      <section class="card gallery">
+        <h2>照片墙</h2>
+        <div class="gallery-tools">
+          <input id="photo-title-input" type="text" placeholder="照片标题（可选）" />
+          <button id="photo-add-btn" class="btn-alt" type="button">上传到照片墙</button>
+        </div>
+        <input id="photo-file-input" type="file" accept="image/*" />
+        <ul class="photos" id="photo-list"></ul>
+      </section>
+
+      <section class="card todo">
+        <h2>打卡</h2>
+        <form id="todo-form">
+          <input id="todo-input" type="text" placeholder="比如：今晚看一部电影" />
+          <button type="submit">添加</button>
+        </form>
+        <ul id="todo-list"></ul>
+      </section>
+    </main>
+
+    <footer>Made for your happy life · 生活总要留点好玩的</footer>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
+
